@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ukens helt</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" />
+<style>
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { font-family: 'DM Sans', sans-serif; display: flex; justify-content: center; padding: 2rem 1rem 3rem; min-height: 100vh; transition: background 0.2s, color 0.2s; }
+
+  body.light { background: #f0ede8; color: #1a1a1a; --bg1:#ffffff; --bg2:#f5f4f1; --bg3:#e8e6e1; --border:rgba(0,0,0,0.1); --border2:rgba(0,0,0,0.2); --text1:#1a1a1a; --text2:#666; --text3:#767676; }
+  body.dark  { background: #111; color: #f0f0f0; --bg1:#1a1a1a; --bg2:#242424; --bg3:#2e2e2e; --border:rgba(255,255,255,0.1); --border2:rgba(255,255,255,0.2); --text1:#f0f0f0; --text2:#a0a0a0; --text3:#909090; }
+
+  .poster-wrap { width: 100%; max-width: 640px; }
+  .poster { width: 100%; border: 1px solid var(--border); border-radius: 12px; background: var(--bg1); overflow: hidden; }
+
+  .poster-header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 1.25rem 2rem 1rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .poster-header-text { text-align: center; flex: 1; }
+  .poster-eyebrow { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text2); margin-bottom: 0.3rem; }
+  .poster-title { font-size: 26px; font-weight: 900; color: var(--text1); line-height: 1.1; margin-bottom: 0.2rem; }
+  .poster-subtitle { font-size: 13px; color: var(--text2); }
+
+  .toggle-btn { flex-shrink: 0; width: 36px; height: 36px; border: 1px solid var(--border2); border-radius: 8px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); transition: background 0.12s; }
+  .toggle-btn:hover { background: var(--bg3); }
+  .toggle-btn:focus-visible { outline: 2px solid var(--border2); outline-offset: 2px; }
+  .toggle-btn i { font-size: 17px; }
+
+  .hero-display { padding: 1.75rem 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; border-bottom: 1px solid var(--border); }
+  .hero-week-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
+  .hero-badge { display: flex; align-items: center; gap: 16px; }
+  .hero-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0; }
+  .hero-name-big { font-size: 36px; font-weight: 800; line-height: 1; }
+  .hero-role { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  .section { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 0.75rem; }
+
+  .resp-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .resp-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text1); line-height: 1.4; }
+  .resp-icon { flex-shrink: 0; width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .resp-icon i { font-size: 13px; }
+
+  .upcoming-list { list-style: none; }
+  .upcoming-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .upcoming-row:last-child { border-bottom: none; }
+  .upcoming-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .upcoming-name { font-size: 14px; font-weight: 500; color: var(--text1); }
+  .upcoming-week { font-size: 13px; color: var(--text2); margin-left: auto; }
+
+  .error-box { text-align: center; padding: 3rem 2rem; color: var(--text2); font-size: 14px; line-height: 1.6; }
+  .error-box strong { display: block; font-size: 16px; font-weight: 500; color: var(--text1); margin-bottom: 0.5rem; }
+  code { font-family: monospace; background: var(--bg2); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+  .resp-item a { color: inherit; text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+  body.light .resp-item a:hover { color: #185FA5; }
+  body.dark  .resp-item a:hover { color: #6ea8de; }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    body, .toggle-btn { transition: none; }
+  }
+</style>
+</head>
+<body class="light">
+<script>if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.replace('light', 'dark');</script>
+
+<main class="poster-wrap">
+  <div class="poster" id="main-poster">
+    <div style="text-align:center; padding: 3rem 2rem; color: var(--text2); font-size:14px;">Laster...</div>
+  </div>
+</main>
+
+<script>
+const COLORS = [
+  { hex:'#185FA5', bg:'#E6F1FB' },
+  { hex:'#0F6E56', bg:'#E1F5EE' },
+  { hex:'#D85A30', bg:'#FAECE7' },
+  { hex:'#D4537E', bg:'#FBEAF0' },
+  { hex:'#534AB7', bg:'#EEEDFE' },
+  { hex:'#BA7517', bg:'#FAEEDA' },
+  { hex:'#A32D2D', bg:'#FCEBEB' },
+];
+
+const RESP_ICONS = [
+  { icon:'ti-layout-dashboard', iconColor:'#185FA5', iconBg:'#E6F1FB' },
+  { icon:'ti-alert-triangle',   iconColor:'#D85A30', iconBg:'#FAECE7' },
+  { icon:'ti-user-check',       iconColor:'#3B6D11', iconBg:'#EAF3DE' },
+  { icon:'ti-book',             iconColor:'#534AB7', iconBg:'#EEEDFE' },
+];
+
+let config = null;
+let isDark = false;
+
+function getCurrentWeekIndex() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 1);
+  return Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000));
+}
+
+function isoWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+}
+
+function getMondayOfWeek(offset) {
+  const now = new Date();
+  const mon = new Date(now);
+  const day = now.getDay() || 7;
+  mon.setDate(now.getDate() - day + 1 + (offset - getCurrentWeekIndex()) * 7);
+  mon.setHours(0, 0, 0, 0);
+  return mon;
+}
+
+function getWeekLabel(offset) {
+  const mon = getMondayOfWeek(offset);
+  const sun = new Date(mon);
+  sun.setDate(mon.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('nb-NO', { day:'numeric', month:'short' });
+  const wn = isoWeek(mon);
+  return `Uke ${wn} · ${fmt(mon)} – ${fmt(sun)}`;
+}
+
+function linkify(text) {
+  return text
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/(<a[^>]*>.*?<\/a>)|(https?:\/\/[^\s<>"]+)/g, (match, linked, rawUrl) =>
+      linked ? linked : `<a href="${rawUrl}" target="_blank" rel="noopener noreferrer">${rawUrl}</a>`
+    );
+}
+
+function getInitials(name) {
+  return name.split(/[\s-]+/).map(w => w[0]).join('').toUpperCase();
+}
+
+function toggleMode() {
+  isDark = !isDark;
+  document.body.classList.toggle('dark', isDark);
+  document.body.classList.toggle('light', !isDark);
+  const btn = document.querySelector('.toggle-btn');
+  if (btn) btn.setAttribute('aria-pressed', isDark);
+  const icon = document.getElementById('mode-icon');
+  if (icon) icon.className = isDark ? 'ti ti-sun' : 'ti ti-moon';
+}
+
+function getHeroForOffset(weekOffset, startDate) {
+  const names = config.names;
+  const n = names.length;
+  const mon = getMondayOfWeek(weekOffset);
+  const weeksDiff = Math.round((mon - startDate) / (7 * 24 * 60 * 60 * 1000));
+  const idx = ((weeksDiff % n) + n) % n;
+  return { name: names[idx], color: COLORS[idx % COLORS.length] };
+}
+
+function buildPoster() {
+  const { names, responsibilities, team } = config;
+  const [y, m, d] = config.rotationStartDate.split('-').map(Number);
+  const startDate = new Date(y, m - 1, d);
+  const weekIdx = getCurrentWeekIndex();
+  const { name, color } = getHeroForOffset(weekIdx, startDate);
+
+  const upcomingRows = Array.from({ length: names.length }, (_, i) => {
+    const { name: uName, color: uColor } = getHeroForOffset(weekIdx + i + 1, startDate);
+    return `<li class="upcoming-row">
+      <span class="upcoming-dot" style="background:${uColor.hex}" aria-hidden="true"></span>
+      <span class="upcoming-name">${uName}</span>
+      <span class="upcoming-week">${getWeekLabel(weekIdx + i + 1)}</span>
+    </li>`;
+  }).join('');
+
+  document.getElementById('main-poster').innerHTML = `
+    <div class="poster-header">
+      <div class="poster-header-text">
+        <p class="poster-eyebrow">IT-utvikling · ${team}</p>
+        <h1 class="poster-title">Ukas helt</h1>
+        <p class="poster-subtitle">Dashboard &amp; Driftsvarsler — Dokumentmottak</p>
+      </div>
+      <button class="toggle-btn" aria-label="Bytt mellom lys og mørk modus" aria-pressed="${isDark}">
+        <i class="ti ${isDark ? 'ti-sun' : 'ti-moon'}" id="mode-icon" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="hero-display">
+      <p class="hero-week-label">${getWeekLabel(weekIdx)}</p>
+      <div class="hero-badge">
+        <div class="hero-avatar" style="background:${color.bg}; color:${color.hex}" aria-hidden="true">${getInitials(name)}</div>
+        <div>
+          <h2 class="hero-name-big" style="color:${color.hex}">${name}</h2>
+          <p class="hero-role">Ukas helt</p>
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <h3 class="section-label">Ansvar</h3>
+      <ul class="resp-list">
+        ${responsibilities.map((text, i) => {
+          const s = RESP_ICONS[i] || RESP_ICONS[0];
+          return `<li class="resp-item">
+            <div class="resp-icon" style="background:${s.iconBg}">
+              <i class="ti ${s.icon}" style="color:${s.iconColor};" aria-hidden="true"></i>
+            </div>
+            <span>${linkify(text)}</span>
+          </li>`;
+        }).join('')}
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 class="section-label">Kommende uker</h3>
+      <ul class="upcoming-list">
+        ${upcomingRows}
+      </ul>
+    </section>
+  `;
+  document.querySelector('.toggle-btn').addEventListener('click', toggleMode);
+}
+
+function showError(reason = 'notfound') {
+  const messages = {
+    notfound: ['Konfigurasjonsfil ikke funnet',  `Filen <code>config.json</code> ble ikke funnet.`],
+    parse:    ['Ugyldig konfigurasjon',           `Filen <code>config.json</code> inneholder ugyldig JSON.`],
+    network:  ['Nettverksfeil',                   `Kunne ikke laste <code>config.json</code>. Sjekk nettverksforbindelsen.`],
+  };
+  const [title, detail] = messages[reason];
+  document.getElementById('main-poster').innerHTML = `
+    <div class="error-box" role="alert">
+      <strong>${title}</strong>
+      ${detail}
+    </div>
+  `;
+}
+
+async function init() {
+  isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.body.classList.toggle('dark', isDark);
+  document.body.classList.toggle('light', !isDark);
+  let res;
+  try {
+    res = await fetch('config.json');
+  } catch {
+    showError('network');
+    return;
+  }
+  if (!res.ok) { showError('notfound'); return; }
+  try {
+    config = await res.json();
+  } catch {
+    showError('parse');
+    return;
+  }
+  buildPoster();
+}
+
+init();
+</script>
+</body>
+</html>
